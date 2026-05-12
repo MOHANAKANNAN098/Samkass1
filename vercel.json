@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/app"
+    },
+    {
+      "source": "/auth/(.*)",
+      "destination": "/api/app"
+    },
+    {
+      "source": "/",
+      "destination": "/kaasflow/frontend/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/kaasflow/frontend/$1"
+    }
+  ]
+}

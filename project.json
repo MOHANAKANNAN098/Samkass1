@@ -1,0 +1,37 @@
+{
+  "overview": "KaasFlow is a mobile-first SaaS app for small-scale financiers in India to manage clients, loans, EMI collections, and send WhatsApp payment reminders. Features admin and staff roles, photo capture for client profiles, PDF receipts, Excel/CSV exports, Tamil/English support, dark/light mode, and a subscription system with trial logic.",
+  "features": [
+    "Phone+PIN authentication with backend security",
+    "Admin and Staff role-based access control",
+    "Client management with camera photo capture",
+    "Loan management with EMI auto-calculation (flat/reducing)",
+    "EMI payment tracking with overdue highlighting",
+    "Daily collection mode with mark paid/missed",
+    "WhatsApp reminder messages (pre-filled Tamil/English)",
+    "PDF receipts generated on payment (jsPDF)",
+    "Excel and CSV export (SheetJS)",
+    "Analytics dashboard with Chart.js bar chart",
+    "Multi-tier subscriptions: Free, Monthly ₹270, Quarterly ₹850, Yearly ₹1999",
+    "2-month free trial with trial banner",
+    "Daily 12AM browser notifications for collection dues",
+    "Individual collection reminders at due time",
+    "PIN change in Settings with validation",
+    "English/Tamil language toggle (Noto Sans Tamil)",
+    "Dark/light mode toggle (dark gold/amber theme)",
+    "Mobile-first 430px layout with bottom navigation bar"
+  ],
+  "category": "finance",
+  "tags": [
+    "loan-management",
+    "emi",
+    "fintech",
+    "tamil-nadu",
+    "saas",
+    "mobile-first",
+    "financier",
+    "payment-tracking",
+    "india",
+    "collections"
+  ],
+  "last_updated": "2026-05-02T08:07:09.211Z"
+}
