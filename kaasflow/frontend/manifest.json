@@ -1,0 +1,20 @@
+{
+  "name": "SamKass – Finance Manager",
+  "short_name": "SamKass",
+  "description": "Manage loans, track EMIs, and automate payment reminders.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0d1a",
+  "theme_color": "#d4a017",
+  "icons": [
+    {
+      "src": "samkaslogo.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "business"]
+}

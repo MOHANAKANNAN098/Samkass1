@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a0d1a" />
+  <title>SamKass – Finance Manager</title>
+  <meta name="description"
+    content="SamKass – Manage loans, track EMIs, and automate payment reminders for small-scale financiers." />
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="../../../samkaslogo.jpeg" type="image/jpeg" />
+  <link rel="apple-touch-icon" href="../../../samkaslogo.jpeg" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SamKass" />
+
+
+  <!-- Google Fonts preload -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* UI/UX VARIABLES */
+    :root, :root[data-theme="dark"] {
+      /* Backgrounds */
+      --bg-primary: #000000;
+      --bg-secondary: #0a0f0a;
+      --bg-card: #0d1a0d;
+      --bg-input: #0a1410;
+
+      /* Primary Green (Logo lime-green gradient) */
+      --green-light: #7ed321;
+      --green-mid: #4caf1a;
+      --green-dark: #1e6b00;
+      --green-glow: rgba(110, 207, 16, 0.53);
+
+      /* Accent Blue (Logo blue sweep) */
+      --blue-light: #00cfff;
+      --blue-mid: #0080c8;
+      --blue-dark: #003c6e;
+      --blue-glow: rgba(0, 170, 255, 0.33);
+
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #b0c4b0;
+      --text-muted: #556655;
+
+      /* Borders */
+      --border-default: #1a3a1a;
+      
+      /* Gradients */
+      --gradient-green: linear-gradient(135deg, #7ed321 0%, #4caf1a 50%, #1e6b00 100%);
+      --gradient-blue: linear-gradient(135deg, #00cfff 0%, #0080c8 100%);
+      --gradient-card: linear-gradient(145deg, #0d1a0d 0%, #0a0f0a 100%);
+      --gradient-btn-primary: linear-gradient(135deg, #7ed321, #2e8b00);
+      --gradient-btn-hover: linear-gradient(135deg, #9aff2a, #4caf1a);
+
+      /* Shadows & Gloss */
+      --kf-shadow-hover: rgba(0, 0, 0, 0.7);
+      --card-gloss-opacity: 0.6;
+
+      /* Mapping to legacy vars */
+      --color-primary: var(--green-light);
+      --color-primary-dark: var(--green-mid);
+      --kf-bg: var(--bg-primary);
+      --kf-surface: var(--bg-secondary);
+      --kf-surface-glass: rgba(10, 15, 10, 0.85);
+      --kf-card: var(--bg-card);
+      --kf-card-border: var(--border-default);
+      --kf-text: var(--text-primary);
+      --kf-text-muted: var(--text-secondary);
+      --kf-amber: var(--green-light);
+      --kf-amber-dark: var(--green-mid);
+      --kf-success: #4caf1a;
+      --kf-danger: #ff4444;
+      --kf-input-bg: var(--bg-input);
+      --kf-input-border: var(--border-default);
+      --kf-divider: rgba(126, 211, 33, 0.1);
+      --kf-shadow: rgba(0, 0, 0, 0.5);
+      
+      /* Fallbacks for JS injected variables */
+      --color-border: var(--kf-card-border);
+      --color-border-muted: var(--kf-divider);
+      --color-success: var(--kf-success);
+      --color-danger: var(--kf-danger);
+      --color-text: var(--kf-text);
+      --color-text-muted: var(--kf-text-muted);
+      --color-surface-elevated: var(--kf-surface);
+    }
+
+    :root[data-theme="light"] {
+      /* Backgrounds */
+      --bg-primary: #f4f7f4;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-input: #f9fcf9;
+
+      /* Primary Green */
+      --green-light: #5ca112; /* Darker for legibility */
+      --green-mid: #4caf1a;
+      --green-dark: #1e6b00;
+      --green-glow: rgba(76, 175, 26, 0.2);
+
+      /* Accent Blue */
+      --blue-light: #0080c8;
+      --blue-mid: #0080c8;
+      --blue-dark: #003c6e;
+      --blue-glow: rgba(0, 128, 200, 0.2);
+
+      /* Text Colors */
+      --text-primary: #0a1410;
+      --text-secondary: #4a5c4a;
+      --text-muted: #8a9c8a;
+
+      /* Borders */
+      --border-default: #dce6dc;
+      
+      /* Gradients */
+      --gradient-green: linear-gradient(135deg, #5ca112 0%, #4caf1a 50%, #1e6b00 100%);
+      --gradient-blue: linear-gradient(135deg, #0080c8 0%, #003c6e 100%);
+      --gradient-card: linear-gradient(145deg, #ffffff 0%, #f9fbf9 100%);
+      --gradient-btn-primary: linear-gradient(135deg, #5ca112, #2e8b00);
+      --gradient-btn-hover: linear-gradient(135deg, #7ed321, #4caf1a);
+
+      /* Shadows & Gloss */
+      --kf-shadow: rgba(0, 0, 0, 0.08);
+      --kf-shadow-hover: rgba(0, 0, 0, 0.15);
+      --card-gloss-opacity: 0.2;
+
+      /* Mapping to legacy vars */
+      --color-primary: var(--green-mid);
+      --color-primary-dark: var(--green-dark);
+      --kf-bg: var(--bg-primary);
+      --kf-surface: var(--bg-secondary);
+      --kf-surface-glass: rgba(255, 255, 255, 0.85);
+      --kf-card: var(--bg-card);
+      --kf-card-border: var(--border-default);
+      --kf-text: var(--text-primary);
+      --kf-text-muted: var(--text-secondary);
+      --kf-amber: var(--green-mid);
+      --kf-amber-dark: var(--green-dark);
+      --kf-success: #3b8e12;
+      --kf-danger: #e11d48;
+      --kf-input-bg: var(--bg-input);
+      --kf-input-border: var(--border-default);
+      --kf-divider: rgba(76, 175, 26, 0.15);
+    }
+
+    body {
+      background-color: var(--kf-bg) !important;
+      color: var(--kf-text) !important;
+      font-family: 'Outfit', sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      background-attachment: fixed;
+    }
+
+    html:not([data-theme="light"]) body, html[data-theme="dark"] body {
+      background-image: 
+        radial-gradient(ellipse at 20% 50%, #0a2a0a 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, #001a33 0%, transparent 40%);
+    }
+
+    html[data-theme="light"] body {
+      background-image: 
+        radial-gradient(ellipse at 20% 50%, rgba(76, 175, 26, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(0, 128, 200, 0.08) 0%, transparent 40%);
+    }
+
+    h1, h2, h3, h4, h5, h6, .auth-logo-title, .app-name, .page-title {
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .kpi-value, .stat-value, .pin-digit-input, #qr-price-text, .emi-preview-row strong, #slot-count-display {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* Glassmorphism Cards */
+    .kf-card, .card, .stat-card, .kpi-card, .client-card, .loan-card, .payment-row, .due-today-item, .collection-item {
+      background: var(--gradient-card) !important;
+      border: 1px solid var(--kf-card-border) !important;
+      border-radius: 18px !important;
+      box-shadow: 0 8px 32px var(--kf-shadow), inset 0 1px 0 var(--kf-divider) !important;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
+    }
+
+    .kf-card::before, .card::before, .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green-light), var(--blue-light), transparent);
+      opacity: var(--card-gloss-opacity);
+      pointer-events: none;
+    }
+
+    .kf-card:hover, .card:hover, .stat-card:hover, .kpi-card:hover, .client-card:hover, .loan-card:hover, .collection-item:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 12px 40px var(--kf-shadow-hover), 0 0 20px var(--green-glow) !important;
+      border-color: var(--green-mid) !important;
+    }
+
+    /* Buttons */
+    .btn-kf-primary, .btn-primary {
+      background: var(--gradient-btn-primary) !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 12px !important;
+      font-weight: 700 !important;
+      padding: 14px 24px !important;
+      transition: all 0.3s ease !important;
+      box-shadow: 0 4px 15px rgba(76, 175, 26, 0.3) !important;
+      font-family: 'Outfit', sans-serif !important;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-kf-primary:hover, .btn-primary:hover {
+      background: var(--gradient-btn-hover) !important;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(126, 211, 33, 0.5) !important;
+    }
+
+    .btn-kf-outline, .btn-secondary {
+      background: var(--kf-input-bg) !important;
+      color: var(--kf-text) !important;
+      border: 1px solid var(--kf-input-border) !important;
+      border-radius: 12px !important;
+      font-weight: 600 !important;
+      padding: 14px 24px !important;
+      transition: all 0.3s ease !important;
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-kf-outline:hover, .btn-secondary:hover {
+      background: var(--kf-card-border) !important;
+      border-color: var(--blue-mid) !important;
+      color: var(--blue-light) !important;
+    }
+
+    .btn-icon {
+      background: var(--kf-input-bg) !important;
+      border: 1px solid var(--kf-input-border) !important;
+      color: var(--kf-text) !important;
+      border-radius: 12px !important;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+
+    .btn-icon:hover {
+      background: var(--kf-accent) !important;
+      color: #000000 !important;
+      border-color: var(--kf-accent) !important;
+      transform: translateY(-3px) rotate(5deg);
+      box-shadow: 0 8px 15px var(--green-glow);
+    }
+    
+    .btn-icon.danger:hover {
+      background: var(--kf-danger) !important;
+      color: #fff !important;
+      border-color: var(--kf-danger) !important;
+      box-shadow: 0 8px 15px rgba(255, 68, 68, 0.3);
+    }
+
+    /* Inputs */
+    .kf-input, .form-input, .form-control, .search-input {
+      background: var(--kf-input-bg) !important;
+      border: 1px solid var(--kf-input-border) !important;
+      border-radius: 12px !important;
+      color: var(--kf-text) !important;
+      padding: 14px 16px !important;
+      transition: all 0.2s ease !important;
+      font-size: 1rem !important;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .kf-input::placeholder, .form-control::placeholder {
+      color: var(--text-muted) !important;
+    }
+
+    .kf-input:focus, .form-input:focus, .form-control:focus, .search-input:focus {
+      background: var(--kf-surface) !important;
+      border-color: var(--green-mid) !important;
+      box-shadow: 0 0 0 3px rgba(76, 175, 26, 0.15) !important;
+      outline: none !important;
+    }
+    
+    .input-group-text {
+      background: var(--kf-input-bg) !important;
+      border: 1px solid var(--kf-input-border) !important;
+      border-right: none !important;
+      color: var(--kf-text-muted) !important;
+      border-radius: 12px 0 0 12px !important;
+    }
+    
+    .input-group .form-control {
+      border-left: none !important;
+    }
+    
+    .btn-toggle-pw {
+      border-left: none !important;
+      border-right: 1px solid var(--kf-input-border) !important;
+      border-radius: 0 12px 12px 0 !important;
+      background: var(--kf-input-bg) !important;
+      cursor: pointer;
+      color: var(--text-muted) !important;
+      transition: color 0.2s;
+    }
+
+    .btn-toggle-pw:hover {
+      color: var(--green-light) !important;
+    }
+
+    /* Animations */
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.97) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes slideUpFade {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-section {
+      animation: fadeInScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .stagger-children > * {
+      opacity: 0;
+      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+    .stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+    .stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+    .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+    .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+    .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+    .stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+    .stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+
+    /* Bottom Nav */
+    #bottom-nav {
+      background: var(--kf-surface-glass) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border-top: 1px solid var(--kf-card-border) !important;
+      box-shadow: 0 -10px 40px var(--kf-shadow) !important;
+      padding-bottom: env(safe-area-inset-bottom, 12px) !important;
+    }
+
+    .nav-tab {
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+      position: relative;
+    }
+
+    .nav-tab i {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+      font-size: 1.3rem !important;
+    }
+
+    .nav-tab.active {
+      color: var(--green-light) !important;
+    }
+
+    .nav-tab.active i {
+      transform: translateY(-6px) scale(1.15) !important;
+      text-shadow: 0 0 15px var(--green-glow) !important;
+    }
+    
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      background: var(--blue-light);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--blue-glow);
+    }
+
+    /* Modals */
+    .modal-content {
+      background: var(--kf-surface-glass) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid var(--kf-card-border) !important;
+      border-radius: 28px !important;
+      box-shadow: 0 30px 80px var(--kf-shadow) !important;
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid var(--kf-divider) !important;
+    }
+    
+    .modal-footer {
+      border-top: 1px solid var(--kf-divider) !important;
+    }
+
+    /* Headers */
+    #top-header {
+      background: var(--kf-surface-glass) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border-bottom: 1px solid var(--kf-card-border) !important;
+      box-shadow: 0 4px 30px var(--kf-shadow) !important;
+    }
+
+    .header-logo-icon, .auth-logo-icon {
+      background: var(--gradient-green);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px var(--green-glow));
+    }
+
+    .header-title {
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 800 !important;
+      letter-spacing: -0.5px;
+    }
+
+    /* Avatars & Badges */
+    .badge-kf {
+      padding: 6px 12px !important;
+      border-radius: 20px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.5px !important;
+      text-transform: uppercase;
+      font-size: 0.7rem !important;
+    }
+
+    .badge-active { background: rgba(16, 185, 129, 0.15) !important; color: var(--kf-success) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; }
+    .badge-overdue { background: rgba(239, 68, 68, 0.15) !important; color: var(--kf-danger) !important; border: 1px solid rgba(239, 68, 68, 0.3) !important; }
+    .badge-completed { background: rgba(59, 130, 246, 0.15) !important; color: #3b82f6 !important; border: 1px solid rgba(59, 130, 246, 0.3) !important; }
+
+    .client-avatar {
+      background: var(--gradient-green) !important;
+      color: #ffffff !important;
+      box-shadow: 0 6px 15px var(--green-glow) !important;
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 800 !important;
+      border: 2px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    /* Progress Bars */
+    .kf-progress {
+      background: var(--kf-input-bg) !important;
+      border-radius: 10px !important;
+      height: 8px !important;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .kf-progress-fill {
+      background: var(--gradient-green) !important;
+      border-radius: 10px !important;
+      box-shadow: 0 0 10px var(--green-glow) !important;
+    }
+    .kf-progress-fill.success {
+      background: var(--gradient-green) !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5) !important;
+    }
+    .kf-progress-fill.danger {
+      background: linear-gradient(90deg, #b91c1c, #ef4444) !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5) !important;
+    }
+
+    /* Auth Screen Pro Overrides */
+    .auth-container {
+      background: transparent !important;
+    }
+    .auth-logo-icon {
+      font-size: 3.5rem !important;
+    }
+    .auth-card {
+      background: var(--gradient-card) !important;
+      border-radius: var(--radius-xl) !important;
+      padding: 40px 30px !important;
+    }
+
+    /* Stepper/PIN Inputs */
+    .pin-digit-input {
+      width: 55px !important;
+      height: 65px !important;
+      font-size: 2rem !important;
+      font-weight: 800 !important;
+      border-radius: 16px !important;
+      background: var(--bg-input) !important;
+      border: 2px solid var(--kf-input-border) !important;
+      color: var(--text-primary) !important;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.2) !important;
+      transition: all 0.2s !important;
+    }
+    .pin-digit-input:focus {
+      border-color: var(--green-mid) !important;
+      background: rgba(76, 175, 26, 0.05) !important;
+      box-shadow: 0 0 0 4px rgba(76, 175, 26, 0.15), inset 0 2px 5px rgba(0,0,0,0.2) !important;
+      transform: translateY(-2px);
+    }
+    .pin-digit-input.success {
+      border-color: var(--kf-success) !important;
+      color: var(--kf-success) !important;
+      background: rgba(16, 185, 129, 0.05) !important;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      background: var(--kf-input-bg) !important;
+      border: 1px solid var(--kf-card-border) !important;
+      border-radius: 16px !important;
+      padding: 6px !important;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .filter-tab {
+      flex: 1;
+      min-width: 80px;
+      border-radius: 12px !important;
+      font-weight: 600 !important;
+      color: var(--kf-text-muted) !important;
+      transition: all 0.3s ease !important;
+    }
+    .filter-tab.active {
+      background: var(--kf-card) !important;
+      color: var(--kf-text) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+      border: 1px solid rgba(255,255,255,0.08) !important;
+    }
+
+    /* INFO MODALS & SETTINGS OPTIONS */
+    .settings-option-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+    .settings-option-row:hover {
+      background: rgba(126, 211, 33, 0.05);
+      border-color: var(--green-mid);
+    }
+    .settings-option-icon {
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      background: rgba(126, 211, 33, 0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .settings-option-label {
+      flex: 1;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .settings-option-chevron {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+    .info-modal {
+      position: fixed; inset: 0; background: var(--bg-primary); z-index: 1050; 
+      display: flex; flex-direction: column; animation: slideUp 0.3s ease;
+    }
+    .info-modal-header {
+      display: flex; align-items: center; justify-content: space-between; 
+      padding: 20px 20px 16px; border-bottom: 1px solid var(--border-default);
+      background: var(--kf-surface-glass); backdrop-filter: blur(20px);
+    }
+    .info-modal-title { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
+    .info-modal-close { background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 4px; transition: color 0.2s; }
+    .info-modal-close:hover { color: var(--text-primary); }
+    .info-modal-body { flex: 1; overflow-y: auto; padding: 20px; font-size: 0.875rem; color: var(--text-muted); line-height: 1.8; }
+    .info-modal-body h4 { color: var(--text-primary); margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem; }
+    
+    .contact-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); 
+      display: flex; align-items: flex-end; justify-content: center; z-index: 1050; animation: fadeIn 0.2s ease;
+    }
+    .contact-modal-card {
+      background: var(--bg-card); border: 1px solid var(--border-default); 
+      border-radius: 24px 24px 0 0; padding: 28px 24px 36px; width: 100%; max-width: 500px; animation: slideUp 0.25s ease;
+    }
+    .contact-item-row {
+      display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 12px; 
+      text-decoration: none; transition: background 0.2s; margin-bottom: 8px; border: 1px solid var(--border-default);
+    }
+    .contact-item-row:hover { background: rgba(126, 211, 33, 0.06); border-color: var(--green-mid); }
+    .contact-item-icon {
+      font-size: 22px; width: 44px; height: 44px; background: rgba(126, 211, 33, 0.08); 
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--green-light);
+    }
+    .contact-item-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2px; }
+    .contact-item-value { font-size: 1rem; font-weight: 600; color: var(--green-light); }
+
+    /* Custom scrollbar for webkit */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--kf-card-border);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--kf-input-border);
+    }
+
+    /* Toast Pro */
+    .kf-toast {
+      background: var(--kf-surface-glass) !important;
+      backdrop-filter: blur(12px) !important;
+      border: 1px solid var(--kf-card-border) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 15px 40px var(--kf-shadow) !important;
+      font-weight: 600 !important;
+      padding: 14px 20px !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+
+    /* FIX for Current Plan text visibility */
+    .pro-plan-card .section-title,
+    .pro-plan-card .settings-row-label,
+    .pro-plan-card span,
+    .pro-plan-card div {
+      color: var(--kf-text) !important;
+    }
+
+    /* TAMIL LANGUAGE FIXES */
+    body.tamil-text,
+    body.tamil-text * {
+      font-family: 'Noto Sans Tamil', 'Plus Jakarta Sans', sans-serif !important;
+    }
+
+    body.tamil-text h1, body.tamil-text h2, body.tamil-text h3, 
+    body.tamil-text h4, body.tamil-text h5, body.tamil-text h6,
+    body.tamil-text .btn-kf-primary, body.tamil-text .nav-tab span,
+    body.tamil-text .stat-label, body.tamil-text .section-title,
+    body.tamil-text strong, body.tamil-text label,
+    body.tamil-text button {
+      font-weight: 800 !important; /* Bold texts for Tamil */
+      letter-spacing: 0.2px !important;
+    }
+
+    body.tamil-text span, body.tamil-text p, body.tamil-text div {
+      font-weight: 600; /* Bolder readable font for Tamil */
+    }
+
+    /* PREVENT ICONS FROM DISAPPEARING/CHANGING */
+    body i.fa-solid, body i.fas {
+      font-family: "Font Awesome 6 Free" !important;
+      font-weight: 900 !important;
+    }
+    body i.fa-regular, body i.far {
+      font-family: "Font Awesome 6 Free" !important;
+      font-weight: 400 !important;
+    }
+    body i.fa-brands, body i.fab {
+      font-family: "Font Awesome 6 Brands" !important;
+      font-weight: 400 !important;
+    }
+  </style>
+
+  <!-- Bootstrap 5.3 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+  <!-- Font Awesome 6.5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js 4 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- jsPDF 2.5 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- jsPDF-AutoTable for structured PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- SheetJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Razorpay Payment Gateway -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body id="app-body">
+
+  <!-- ==== LOADING SCREEN ==== -->
+  <div id="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo" style="margin-bottom: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <img src="../../../samkaslogo.jpeg" alt="SamKass Logo" style="width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 25px var(--green-glow); margin-bottom: 16px; object-fit: contain; background: #000000; border: 2px solid var(--border-default); padding: 4px;">
+        <h1 class="auth-logo-title" style="margin-bottom: 0;">SamKass</h1>
+      </div>
+      <div class="loading-spinner"></div>
+      <p class="loading-text" data-i18n="loadingWorkspace">Loading your workspace…</p>
+    </div>
+  </div>
+
+  <!-- ===== AUTH SCREEN ===== -->
+  <div id="auth-screen" style="display:none;">
+    <div class="auth-container">
+      <!-- Logo -->
+      <div class="auth-logo" style="text-align: center; display: flex; flex-direction: column; align-items: center; margin-bottom: 1rem;">
+        <img src="../../../samkaslogo.jpeg" alt="SamKass Logo" style="width: 110px; height: 110px; border-radius: 50%; box-shadow: 0 0 25px var(--green-glow); margin-bottom: 16px; object-fit: contain; background: #000000; border: 2px solid var(--border-default); padding: 4px;">
+        <h1 class="auth-logo-title" style="margin-bottom: 4px;">SamKass</h1>
+        <p class="auth-logo-sub">Finance Manager</p>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-form-wrapper" class="kf-card auth-card">
+        <h2 class="auth-card-title" data-i18n="welcomeBack">Welcome Back</h2>
+        <p class="auth-card-sub" data-i18n="signInToAccount">Sign in to your account</p>
+
+        <!-- Google Login Button -->
+        <div class="mb-3 d-flex justify-content-center">
+          <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-context="signin" data-ux_mode="popup"
+            data-callback="handleGoogleLogin" data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+            data-text="continue_with" data-size="large" data-logo_alignment="left" data-width="100%">
+          </div>
+        </div>
+
+        <div class="divider-text mb-3"><span data-i18n="orUseEmail">or use email</span></div>
+
+        <form id="login-form" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="login-email" data-i18n="emailAddress">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+              <input type="email" id="login-email" class="form-control" placeholder="name@company.com"
+                data-ocid="auth.email_input" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="login-password" data-i18n="password">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+              <input type="password" id="login-password" class="form-control" placeholder="Enter password"
+                data-ocid="auth.password_input" />
+              <button type="button" class="input-group-text btn-toggle-pw" data-target="login-password"><i
+                  class="fa-solid fa-eye"></i></button>
+            </div>
+            <div class="text-end mt-1">
+              <a href="#" id="show-forgot-password" class="text-decoration-none" style="font-size: 0.85rem; color: var(--color-primary);">Forgot Password?</a>
+            </div>
+          </div>
+          <div id="login-error" class="alert alert-danger d-none" role="alert" data-ocid="auth.error_state"></div>
+          <button type="submit" class="btn-kf-primary w-100" data-ocid="auth.submit_button">
+            <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+          </button>
+        </form>
+        <div class="auth-switch">
+          <span data-i18n="noAccount">Don't have an account?</span>
+          <button type="button" class="btn-link" id="show-register" data-ocid="auth.register_link"
+            data-i18n="register">Register</button>
+        </div>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form-wrapper" class="kf-card auth-card" style="display:none;">
+        <h2 class="auth-card-title" data-i18n="createAccount">Create Account</h2>
+        <p class="auth-card-sub" data-i18n="startManagingLoans">Start managing your loans</p>
+        <form id="register-form" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="reg-name" data-i18n="fullName">Full Name</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+              <input type="text" id="reg-name" class="form-control" placeholder="Your Name"
+                data-ocid="auth.name_input" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="reg-email" data-i18n="emailAddress">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+              <input type="email" id="reg-email" class="form-control" placeholder="name@company.com"
+                data-ocid="auth.reg_email_input" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="reg-password" data-i18n="password">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+              <input type="password" id="reg-password" class="form-control" placeholder="Min 6 characters"
+                data-ocid="auth.reg_password_input" />
+              <button type="button" class="input-group-text btn-toggle-pw" data-target="reg-password"><i
+                  class="fa-solid fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="reg-business" data-i18n="businessNameInput">Business / Firm Name</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
+              <input type="text" id="reg-business" class="form-control" placeholder="My Finance Co."
+                data-ocid="auth.business_input" />
+            </div>
+          </div>
+          <div id="register-error" class="alert alert-danger d-none" role="alert" data-ocid="auth.reg_error_state">
+          </div>
+          <button type="submit" class="btn-kf-primary w-100" data-ocid="auth.reg_submit_button">
+            <i class="fa-solid fa-user-plus me-2"></i>Create Account
+          </button>
+        </form>
+        <div class="auth-switch">
+          <span data-i18n="haveAccount">Already have an account?</span>
+          <button type="button" class="btn-link" id="show-login" data-ocid="auth.login_link"
+            data-i18n="login">Login</button>
+        </div>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div id="forgot-password-wrapper" class="kf-card auth-card" style="display:none;">
+        <h2 class="auth-card-title">Reset Password</h2>
+        <p class="auth-card-sub">Enter your email to receive a secure login link</p>
+        <form id="forgot-password-form" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="forgot-email">Email Address <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+              <input type="email" id="forgot-email" class="form-control kf-input" placeholder="name@company.com" />
+            </div>
+          </div>
+          <div id="forgot-error" class="alert alert-danger d-none" role="alert" style="font-size:0.875rem"></div>
+          <div id="forgot-success" class="alert alert-success d-none" role="alert" style="font-size:0.875rem"></div>
+          <button type="submit" class="btn-kf-primary w-100" id="forgot-submit-btn">
+            <i class="fa-solid fa-paper-plane me-2"></i>Send Magic Link
+          </button>
+        </form>
+        <div class="auth-switch mt-3">
+          <span>Remember your password?</span>
+          <button type="button" class="btn-link" id="show-login-from-forgot">Back to Login</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 2: SET PIN (after first signup/login) ===== -->
+      <div id="pin-setup-wrapper" class="kf-card auth-card" style="display:none;">
+        <div style="text-align:center;margin-bottom:1rem">
+          <div
+            style="width:56px;height:56px;background:var(--gradient-green);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;color:#ffffff;margin-bottom:.5rem">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h2 class="auth-card-title" style="margin-bottom:.25rem" data-i18n="setSecurityPin">Set Security PIN</h2>
+          <p class="auth-card-sub" style="margin-bottom:0" data-i18n="createPinDesc">Create a 4-digit PIN to protect
+            your app</p>
+        </div>
+        <div id="pin-setup-inputs" style="display:flex;justify-content:center;gap:.75rem;margin-bottom:1.25rem">
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="0" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="1" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="2" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="3" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+        </div>
+        <div id="pin-setup-error" class="alert alert-danger d-none" role="alert"></div>
+        <button type="button" class="btn-kf-primary w-100" id="btn-confirm-pin" data-ocid="auth.confirm_pin_button">
+          <i class="fa-solid fa-lock me-2"></i><span data-i18n="setPinContinue">Set PIN &amp; Continue</span>
+        </button>
+        <p style="font-size:.75rem;color:var(--color-text-muted);text-align:center;margin-top:.75rem;margin-bottom:0">
+          <i class="fa-solid fa-info-circle me-1"></i><span data-i18n="pinInfoText">You'll use this PIN every time you
+            open the app</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== PIN LOCK SCREEN (returning users) ===== -->
+  <div id="pin-lock-screen" style="display:none;">
+    <div class="auth-container" style="align-items:center">
+      <div class="auth-logo" style="text-align: center; display: flex; flex-direction: column; align-items: center; margin-bottom: 1.5rem;">
+        <img src="../../../samkaslogo.jpeg" alt="SamKass Logo" style="width: 110px; height: 110px; border-radius: 50%; box-shadow: 0 0 25px var(--green-glow); margin-bottom: 16px; object-fit: contain; background: #000000; border: 2px solid var(--border-default); padding: 4px;">
+        <h1 class="auth-logo-title">SamKass</h1>
+      </div>
+
+      <div class="kf-card auth-card" style="text-align:center">
+        <!-- User avatar & name -->
+        <div style="margin-bottom:1rem">
+          <div id="pin-lock-avatar"
+            style="width:64px;height:64px;background:var(--gradient-green);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#ffffff;margin-bottom:.5rem">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div id="pin-lock-name" style="font-size:1.0625rem;font-weight:700;color:var(--color-text)">Welcome Back</div>
+          <div id="pin-lock-email" style="font-size:.8125rem;color:var(--color-text-muted)"></div>
+        </div>
+
+        <p style="font-size:.875rem;color:var(--color-text-muted);margin-bottom:1rem">
+          <i class="fa-solid fa-lock me-1"></i><span data-i18n="enterPin">Enter your 4-digit PIN</span>
+        </p>
+
+        <div id="pin-lock-inputs" style="display:flex;justify-content:center;gap:.75rem;margin-bottom:1.25rem">
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="0" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="1" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="2" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+          <input type="password" maxlength="1" class="pin-digit-input" data-pin-idx="3" inputmode="numeric"
+            pattern="[0-9]" autocomplete="off" />
+        </div>
+
+        <div id="pin-lock-error" class="alert alert-danger d-none" role="alert"></div>
+
+        <button type="button" class="btn-kf-primary w-100" id="btn-unlock-pin" data-ocid="auth.unlock_pin_button">
+          <i class="fa-solid fa-lock-open me-2"></i><span data-i18n="unlock">Unlock</span>
+        </button>
+
+        <div class="auth-switch" style="margin-top:1rem">
+          <button type="button" class="btn-link" id="btn-switch-account" data-ocid="auth.switch_account_link">
+            <i class="fa-solid fa-arrow-right-from-bracket me-1"></i><span data-i18n="switchAccount">Switch
+              Account</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APP ===== -->
+  <div id="main-app" style="display:none;">
+
+    <!-- Top Header -->
+    <header id="top-header">
+      <div class="header-left" style="display: flex; align-items: center; gap: 10px;">
+        <img src="../../../samkaslogo.jpeg" alt="Logo" style="width: 42px; height: 42px; border-radius: 50%; box-shadow: 0 0 10px var(--green-glow); object-fit: contain; background: #000000; border: 1px solid var(--border-default); padding: 2px;">
+        <span class="header-title" style="font-size: 1.25rem;">SamKass</span>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="header-icon-btn" aria-label="Toggle theme" data-ocid="settings.toggle">
+          <i class="fa-solid fa-moon" id="theme-icon"></i>
+        </button>
+        <button id="notif-bell" class="header-icon-btn" aria-label="Notifications" data-ocid="notifications.button">
+          <i class="fa-solid fa-bell"></i>
+          <span id="notif-badge" class="notif-badge d-none"></span>
+        </button>
+        <button id="user-avatar-btn" class="header-avatar" aria-label="Account" data-ocid="user.menu_button">
+          <i class="fa-solid fa-circle-user"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Notifications Dropdown -->
+    <div id="notif-dropdown" class="notif-dropdown d-none" data-ocid="notifications.popover">
+      <div class="notif-header">
+        <span data-i18n="notifications">Notifications</span>
+        <button type="button" id="clear-notifs" class="btn-link small" data-ocid="notifications.clear_button"
+          data-i18n="clearAll">Clear all</button>
+      </div>
+      <div id="notif-list" class="notif-list"></div>
+      <div id="notif-empty" class="notif-empty" data-i18n="noNewNotifications">No new notifications</div>
+    </div>
+
+    <!-- Plan Banner (trial / expiry warning) -->
+    <div id="plan-banner" class="plan-banner d-none">
+      <i class="fa-solid fa-triangle-exclamation me-2"></i>
+      <span id="plan-banner-text"></span>
+      <button type="button" class="btn-upgrade-sm ms-auto" id="banner-upgrade-btn" data-ocid="upgrade.banner_button"
+        data-i18n="upgrade">Upgrade</button>
+    </div>
+
+    <!-- Page Content -->
+    <main id="page-content" role="main">
+      <!-- Pages are dynamically rendered here by app.js -->
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav id="bottom-nav" role="navigation" aria-label="Main Navigation">
+      <a href="#" class="nav-tab active" data-page="dashboard" aria-label="Dashboard" data-ocid="nav.dashboard_tab">
+        <i class="fa-solid fa-house"></i>
+        <span data-i18n="dashboard">Dashboard</span>
+      </a>
+      <a href="#" class="nav-tab" data-page="clients" aria-label="Clients" data-ocid="nav.clients_tab">
+        <i class="fa-solid fa-users"></i>
+        <span data-i18n="clients">Clients</span>
+      </a>
+      <a href="#" class="nav-tab" data-page="loans" aria-label="Loans" data-ocid="nav.loans_tab">
+        <i class="fa-solid fa-money-bill-wave"></i>
+        <span data-i18n="loans">Loans</span>
+      </a>
+      <a href="#" class="nav-tab" data-page="collection" aria-label="Collection" data-ocid="nav.collection_tab">
+        <i class="fa-solid fa-calendar-check"></i>
+        <span data-i18n="collect">Collect</span>
+      </a>
+      <a href="#" class="nav-tab" data-page="reports" aria-label="Reports" data-ocid="nav.reports_tab">
+        <i class="fa-solid fa-chart-bar"></i>
+        <span data-i18n="reports">Reports</span>
+      </a>
+      <a href="#" class="nav-tab" data-page="settings" aria-label="Settings" data-ocid="nav.settings_tab">
+        <i class="fa-solid fa-gear"></i>
+        <span data-i18n="settings">Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- ===== MODALS ===== -->
+
+  <!-- Add Client Modal -->
+  <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true"
+    data-ocid="client.dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title" id="clientModalLabel" data-i18n="addClient">Add Client</h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"
+            data-ocid="client.close_button"></button>
+        </div>
+        <div class="modal-body">
+          <form id="client-form" novalidate>
+            <input type="hidden" id="client-edit-id" />
+            <div class="mb-3">
+              <label class="form-label" for="client-name">Full Name <span class="text-danger">*</span></label>
+              <input type="text" id="client-name" class="form-control kf-input" placeholder="Client name"
+                data-ocid="client.name_input" />
+              <div class="invalid-feedback" data-ocid="client.name_field_error">Name is required.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="client-phone">Phone Number <span class="text-danger">*</span></label>
+              <input type="tel" id="client-phone" class="form-control kf-input" placeholder="9876543210" maxlength="10"
+                data-ocid="client.phone_input" />
+              <div class="invalid-feedback" data-ocid="client.phone_field_error">Valid 10-digit phone required.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="client-address" data-i18n="address">Address</label>
+              <textarea id="client-address" class="form-control kf-input" rows="2" placeholder="Street, City"
+                data-ocid="client.address_input"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="client-id-num">ID Number (Aadhaar / PAN)</label>
+              <input type="text" id="client-id-num" class="form-control kf-input" placeholder="Optional"
+                data-ocid="client.id_input" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="client-occupation">Occupation</label>
+              <input type="text" id="client-occupation" class="form-control kf-input" placeholder="e.g. Farmer, Trader"
+                data-ocid="client.occupation_input" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer kf-modal-footer">
+          <button type="button" class="btn-kf-outline" data-bs-dismiss="modal" data-ocid="client.cancel_button"
+            data-i18n="cancel">Cancel</button>
+          <button type="button" class="btn-kf-primary" id="save-client-btn" data-ocid="client.save_button">
+            <i class="fa-solid fa-floppy-disk me-2"></i><span data-i18n="saveClient">Save Client</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Loan Modal -->
+  <div class="modal fade" id="loanModal" tabindex="-1" aria-labelledby="loanModalLabel" aria-hidden="true"
+    data-ocid="loan.dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title" id="loanModalLabel" data-i18n="addLoan">Add Loan</h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"
+            data-ocid="loan.close_button"></button>
+        </div>
+        <div class="modal-body">
+          <form id="loan-form" novalidate>
+            <input type="hidden" id="loan-edit-id" />
+            <div class="mb-3">
+              <label class="form-label" for="loan-client-select">Client <span class="text-danger">*</span></label>
+              <select id="loan-client-select" class="form-select kf-input" data-ocid="loan.client_select">
+                <option value="">Select client…</option>
+              </select>
+            </div>
+            
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label" for="loan-interest-type">Interest Type</label>
+                <select id="loan-interest-type" class="form-select kf-input">
+                  <option value="percentage">Percentage Interest</option>
+                  <option value="fixed">Fixed Interest</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label" for="loan-type">Collection Type</label>
+                <select id="loan-type" class="form-select kf-input" data-ocid="loan.type_select">
+                  <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label" for="loan-principal">Principal (₹) <span class="text-danger">*</span></label>
+                <input type="number" id="loan-principal" class="form-control kf-input" placeholder="50000" min="1"
+                  data-ocid="loan.principal_input" />
+              </div>
+              <div class="col-6">
+                <label class="form-label" id="label-loan-interest" for="loan-interest">Interest Percentage <span class="text-danger">*</span></label>
+                <input type="number" id="loan-interest" class="form-control kf-input" placeholder="2" min="0" step="0.1"
+                  data-ocid="loan.interest_input" />
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label" for="loan-duration">Duration (months)</label>
+              <input type="number" id="loan-duration" class="form-control kf-input" placeholder="Optional" min="1"
+                data-ocid="loan.duration_input" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="loan-start-date">Start Date</label>
+              <input type="date" id="loan-start-date" class="form-control kf-input" data-ocid="loan.start_date_input" />
+            </div>
+            <!-- EMI Preview -->
+            <div id="emi-preview" class="emi-preview-box d-none">
+              <div class="emi-preview-row">
+                <span>Monthly Interest</span><strong id="emi-preview-monthly-interest">—</strong>
+              </div>
+              <div class="emi-preview-row">
+                <span>Weekly Interest</span><strong id="emi-preview-weekly-interest">—</strong>
+              </div>
+              <div class="emi-preview-row" style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--color-border-muted);">
+                <span>Total Payable</span><strong id="emi-preview-total">—</strong>
+              </div>
+              <div class="emi-preview-row">
+                <span>Remaining Balance</span><strong id="emi-preview-remaining">—</strong>
+              </div>
+              <div class="emi-preview-row" style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--color-border-muted);">
+                <span id="emi-preview-collection-label" style="font-weight:700; color:var(--color-primary);">Collection Amount</span>
+                <strong id="emi-preview-amount" style="font-size:1.1rem; color:var(--color-primary);">—</strong>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer kf-modal-footer">
+          <button type="button" class="btn-kf-outline" data-bs-dismiss="modal" data-ocid="loan.cancel_button"
+            data-i18n="cancel">Cancel</button>
+          <button type="button" class="btn-kf-primary" id="save-loan-btn" data-ocid="loan.save_button">
+            <i class="fa-solid fa-floppy-disk me-2"></i><span data-i18n="saveLoan">Save Loan</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Record Payment Modal -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true"
+    data-ocid="payment.dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title" id="paymentModalLabel" data-i18n="recordPayment">Record Payment</h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"
+            data-ocid="payment.close_button"></button>
+        </div>
+        <div class="modal-body">
+          <form id="payment-form" novalidate>
+            <input type="hidden" id="payment-loan-id" />
+            <div id="payment-loan-summary" class="emi-preview-box mb-3"></div>
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="form-label" for="payment-amount">Amount (₹) <span class="text-danger">*</span></label>
+                <input type="number" id="payment-amount" class="form-control kf-input" placeholder="EMI amount" min="1"
+                  data-ocid="payment.amount_input" />
+              </div>
+              <div class="col-6">
+                <label class="form-label" for="payment-date">Date</label>
+                <input type="date" id="payment-date" class="form-control kf-input" data-ocid="payment.date_input" />
+              </div>
+            </div>
+            <div class="mb-3 mt-2">
+              <label class="form-label" for="payment-note" data-i18n="noteOptional">Note (optional)</label>
+              <input type="text" id="payment-note" class="form-control kf-input" placeholder="e.g. Cash collected"
+                data-ocid="payment.note_input" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer kf-modal-footer">
+          <button type="button" class="btn-kf-outline" data-bs-dismiss="modal" data-ocid="payment.cancel_button"
+            data-i18n="cancel">Cancel</button>
+          <button type="button" class="btn-kf-primary" id="save-payment-btn" data-ocid="payment.save_button">
+            <i class="fa-solid fa-check me-2"></i><span data-i18n="confirmPayment">Confirm Payment</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Receipt Modal -->
+  <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true" data-ocid="receipt.dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title"><i class="fa-solid fa-receipt me-2" style="color:var(--color-primary)"></i>Payment Receipt</h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="receipt-modal-body">
+          <!-- Details injected by app.js -->
+        </div>
+        <div class="modal-footer kf-modal-footer flex-column gap-2">
+          <button type="button" class="btn-kf-primary w-100" id="btn-download-receipt">
+            <i class="fa-solid fa-file-pdf me-2"></i>Download PDF
+          </button>
+          <button type="button" class="btn-kf-outline w-100" id="btn-whatsapp-receipt" style="color:#25D366; border-color:#25D366;">
+            <i class="fa-brands fa-whatsapp me-2" style="font-size:1.2rem;"></i>Share on WhatsApp
+          </button>
+          <button type="button" class="btn-link text-muted-kf mt-1" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Loan Modal -->
+  <div class="modal fade" id="loanInfoModal" tabindex="-1" aria-hidden="true" data-ocid="loan.info_dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title"><i class="fa-solid fa-circle-info me-2" style="color:var(--color-primary)"></i>About Loan</h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="loan-info-body">
+          <!-- Details injected by app.js -->
+        </div>
+        <div class="modal-footer kf-modal-footer">
+          <button type="button" class="btn-kf-outline w-100" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Client Modal -->
+  <div class="modal fade" id="clientProfileModal" tabindex="-1" aria-hidden="true" data-ocid="client.profile_dialog">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title" id="clientProfileName" data-i18n="clientProfile">Client Profile</h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"
+            data-ocid="client.profile_close_button"></button>
+        </div>
+        <div class="modal-body" id="client-profile-body"></div>
+        <div class="modal-footer kf-modal-footer">
+          <button type="button" class="btn-kf-outline" data-bs-dismiss="modal" data-ocid="client.profile_cancel_button"
+            data-i18n="close">Close</button>
+          <button type="button" class="btn-kf-primary" id="add-loan-from-profile" data-ocid="client.add_loan_button">
+            <i class="fa-solid fa-plus me-2"></i><span data-i18n="addLoan">Add Loan</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true" data-ocid="delete.dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title" data-i18n="confirmDelete">Confirm Delete</h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"
+            data-ocid="delete.close_button"></button>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-delete-msg" class="mb-0">Are you sure you want to delete this item? This cannot be undone.</p>
+        </div>
+        <div class="modal-footer kf-modal-footer">
+          <button type="button" class="btn-kf-outline" data-bs-dismiss="modal" data-ocid="delete.cancel_button"
+            data-i18n="cancel">Cancel</button>
+          <button type="button" class="btn-kf-danger" id="confirm-delete-btn" data-ocid="delete.confirm_button"
+            data-i18n="delete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upgrade Modal -->
+  <div class="modal fade" id="upgradeModal" tabindex="-1" aria-labelledby="upgradeModalLabel" aria-hidden="true"
+    data-ocid="upgrade.dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title" id="upgradeModalLabel">
+            <i class="fa-solid fa-crown me-2" style="color:var(--color-primary)"></i><span
+              data-i18n="upgradePlan">Upgrade Plan</span>
+          </h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Plan cards are injected by subscription.js -->
+
+          <!-- ─── Buy Client Slots Section ─── -->
+          <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--color-border)">
+            <div style="font-weight:700; font-size:1.0625rem; margin-bottom:.25rem">
+              <i class="fa-solid fa-users-rectangle me-1" style="color:var(--color-primary)"></i>
+              <span data-i18n="buyClientSlots">Buy Client Slots</span>
+            </div>
+            <p style="font-size:.8125rem; color:var(--color-text-muted); margin-bottom:1rem">
+              First 20 clients are FREE. Add more in blocks of 5 at ₹99 per block.
+            </p>
+
+            <!-- Stepper -->
+            <div style="display:flex; align-items:center; justify-content:center; gap:1rem; margin-bottom:1rem">
+              <button type="button" id="slot-minus-btn" class="btn-kf-outline"
+                style="width:44px;height:44px;border-radius:50%;font-size:1.25rem;display:flex;align-items:center;justify-content:center;padding:0;opacity:0.4"
+                disabled onclick="if(extraSlots>5){extraSlots-=5;updateSlotUI();}">
+                <i class="fa-solid fa-minus"></i>
+              </button>
+              <div style="min-width:60px;text-align:center">
+                <div id="slot-count-display"
+                  style="font-size:2rem;font-weight:800;line-height:1;color:var(--color-primary)">5</div>
+                <div style="font-size:.7rem;color:var(--color-text-muted);margin-top:2px">clients</div>
+              </div>
+              <button type="button" id="slot-plus-btn" class="btn-kf-outline"
+                style="width:44px;height:44px;border-radius:50%;font-size:1.25rem;display:flex;align-items:center;justify-content:center;padding:0"
+                onclick="extraSlots+=5;updateSlotUI();">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="kf-card"
+              style="background:var(--color-surface-elevated);border:1px solid var(--color-border);padding:.875rem 1rem;border-radius:.75rem">
+              <div style="display:flex;justify-content:space-between;margin-bottom:.375rem;font-size:.8125rem">
+                <span style="color:var(--color-text-muted)" data-i18n="extraClients">Extra Clients</span>
+                <strong id="slot-extra-clients">5</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:.375rem;font-size:.8125rem">
+                <span style="color:var(--color-text-muted)">Blocks (×5 clients)</span>
+                <strong id="slot-blocks">1</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:.375rem;font-size:.8125rem">
+                <span style="color:var(--color-text-muted)">Price (₹99/block)</span>
+                <strong id="slot-price" style="color:var(--color-primary)">₹99</strong>
+              </div>
+              <div style="border-top:1px solid var(--color-border);margin:.5rem 0"></div>
+              <div style="display:flex;justify-content:space-between;font-size:.875rem">
+                <span style="color:var(--color-text-muted)">New Client Limit</span>
+                <strong id="slot-new-limit" style="color:var(--color-success)">25 clients</strong>
+              </div>
+            </div>
+
+            <!-- Pay Button -->
+            <button type="button" id="slot-pay-btn" class="btn-kf-primary w-100"
+              style="margin-top:.875rem;min-height:48px;font-size:1rem;font-weight:700"
+              onclick="openQRPayment(extraSlots)">
+              Pay ₹99 via UPI →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Payment Modal -->
+  <div class="modal fade" id="modal-qr" tabindex="-1" aria-hidden="true" data-ocid="qr.dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content kf-modal-content">
+        <div class="modal-header kf-modal-header">
+          <h5 class="modal-title">
+            <i class="fa-solid fa-qrcode me-2" style="color:var(--color-primary)"></i>UPI Payment
+          </h5>
+          <button type="button" class="btn-close kf-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <div id="qr-price-text"
+            style="font-size:2rem;font-weight:800;color:var(--color-primary);margin-bottom:.25rem">₹99</div>
+          <div id="qr-desc-text" style="font-size:.8125rem;color:var(--color-text-muted);margin-bottom:1rem">5 client
+            slots • 1 block(s) × ₹99</div>
+
+          <div style="background:white;border-radius:.75rem;padding:1rem;display:inline-block;margin-bottom:1rem">
+            <img id="qr-img" src="" alt="QR Code" style="width:180px;height:180px;image-rendering:pixelated" />
+          </div>
+
+          <p style="font-size:.8125rem;color:var(--color-text-muted);margin-bottom:1rem">
+            Scan this QR with any UPI app (GPay, PhonePe, Paytm) and enter the transaction ID below.
+          </p>
+
+          <div class="mb-3">
+            <label class="form-label" for="upi-txn-id" style="font-weight:600">UPI Transaction ID</label>
+            <input type="text" id="upi-txn-id" class="form-control kf-input" placeholder="e.g. T2405101234567890"
+              maxlength="30" />
+            <div style="font-size:.75rem;color:var(--color-text-muted);margin-top:.25rem">Enter the 12+ digit UPI
+              reference number</div>
+          </div>
+        </div>
+        <div class="modal-footer kf-modal-footer">
+          <button type="button" class="btn-kf-outline" data-bs-dismiss="modal" data-i18n="cancel">Cancel</button>
+          <button type="button" class="btn-kf-primary" id="confirm-qr-payment-btn" onclick="confirmPayment()">
+            <i class="fa-solid fa-check me-2"></i><span data-i18n="confirmPayment">Confirm Payment</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TERMS & CONDITIONS MODAL ── -->
+  <div id="termsModal" class="info-modal" style="display:none;">
+    <div class="info-modal-header">
+      <span class="info-modal-title">Terms & Conditions</span>
+      <button class="info-modal-close" onclick="closeModal('termsModal')">✕</button>
+    </div>
+    <div class="info-modal-body" id="termsContent">
+      <p><strong>Effective Date:</strong> [Insert Date]</p>
+      
+      <h4>1. Acceptance of Terms</h4>
+      <p>By accessing or using the SamKass Finance Manager web application ("SamKass"), you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our services.</p>
+      
+      <h4>2. Description of Service</h4>
+      <p>SamKass is a Software-as-a-Service (SaaS) ledger and management tool designed for small-scale financiers to track loans, calculate EMIs, generate receipts, and manage daily collections.</p>
+      
+      <h4>3. Nature of the Platform</h4>
+      <p>SamKass is strictly a technology provider. We are not a bank, NBFC, registered financial institution, or lending entity. We do not issue loans, process actual loan disbursements, or act as an intermediary in your financial transactions. The platform is solely a digital ledger for your business record-keeping.</p>
+      
+      <h4>4. User Obligations & Legal Compliance</h4>
+      <p>You agree to use SamKass in compliance with all applicable local, state, and national laws regarding money lending, interest rates, and financial regulations (including but not limited to laws in India / Tamil Nadu). You are solely responsible for the accuracy of the data you input, the terms of the loans you issue, and your collection practices. You must not use SamKass for any illegal, fraudulent, or unauthorized activities.</p>
+      
+      <h4>5. Data Backups & Device Loss</h4>
+      <p>While SamKass provides export functionality (JSON, CSV, PDF), your primary business data is stored locally on your device's browser unless actively synced to a cloud backend. You are solely responsible for regularly exporting and backing up your data. SamKass is not liable for data loss due to device formatting, browser cache clearing, or hardware failure.</p>
+      
+      <h4>6. Subscriptions and Payments</h4>
+      <p>SamKass offers a free tier (limited to 20 clients) and premium subscription plans (Monthly, Quarterly, Yearly) for extended usage. Purchases for premium plans and additional client slots are final. Refunds are processed solely at our discretion and according to our internal refund policy. We reserve the right to modify subscription pricing with prior notice.</p>
+      
+      <h4>7. Intellectual Property</h4>
+      <p>All branding, logos (including the SamKass logo), software code, and UI/UX designs within the application are the exclusive intellectual property of SamKass. You may not copy, reverse-engineer, or distribute our software without written permission.</p>
+      
+      <h4>8. Limitation of Liability</h4>
+      <p>To the maximum extent permitted by law, SamKass and its developers shall not be liable for any direct, indirect, incidental, consequential, or financial damages resulting from the use or inability to use the service, including but not limited to lost profits, lost data, or disputes between you and your clients.</p>
+      
+      <h4>9. Termination</h4>
+      <p>We reserve the right to suspend or terminate your account at any time if we suspect a violation of these Terms and Conditions, unauthorized use, or illegal activities.</p>
+      
+      <h4>10. Contact Information</h4>
+      <p>For any inquiries regarding these Terms and Conditions, please reach out to us at: <a href="mailto:mohansampath098@gmail.com" style="color:var(--text-accent-blue);">mohansampath098@gmail.com</a></p>
+    </div>
+  </div>
+
+  <!-- ── PRIVACY POLICY MODAL ── -->
+  <div id="privacyModal" class="info-modal" style="display:none;">
+    <div class="info-modal-header">
+      <span class="info-modal-title">Privacy Policy</span>
+      <button class="info-modal-close" onclick="closeModal('privacyModal')">✕</button>
+    </div>
+    <div class="info-modal-body" id="privacyContent">
+      <p><strong>Effective Date:</strong> [Insert Date]</p>
+      
+      <h4>1. Introduction</h4>
+      <p>Welcome to SamKass ("we," "our," or "us"). We are committed to protecting your privacy and ensuring that your personal and business data is handled securely. This Privacy Policy explains how we collect, use, and protect your information when you use the SamKass Finance Manager web application.</p>
+      
+      <h4>2. Information We Collect</h4>
+      <p><strong>Account Information:</strong> When you register, we collect your name, email address, business/firm name, and an encrypted password. If you log in using Google OAuth, we collect your basic profile information (name, email, and profile picture).<br>
+      <strong>Business & Financial Data:</strong> Information regarding your clients, loan details, EMIs, and payment records.<br>
+      <strong>Usage Data:</strong> We may collect basic diagnostic data and usage metrics to improve application performance.</p>
+      
+      <h4>3. How Your Data is Stored</h4>
+      <p><strong>Local Storage Architecture:</strong> To ensure high performance and privacy, SamKass is built with an offline-first architecture. Your core business data (clients, loans, payments) is primarily stored locally on your device/browser via localStorage.<br>
+      <strong>Cloud Sync & Authentication:</strong> Your account credentials and subscription status are securely managed by our backend servers. Passwords are cryptographically hashed (bcrypt), and sessions are managed via secure JWT cookies.</p>
+      
+      <h4>4. How We Use Your Information</h4>
+      <p>To authenticate your account and secure your data. To provide the core functionalities of the app, including EMI tracking, receipt generation, and WhatsApp reminder formatting. To process subscription upgrades and payments. To send you essential account updates (e.g., Magic Login links, plan expiry notices).</p>
+      
+      <h4>5. Data Sharing & Third Parties</h4>
+      <p>We do not sell, rent, or trade your personal or business data to third parties. We only share data with essential service providers necessary to operate the app (e.g., Google for OAuth login, email providers for sending login links).</p>
+      
+      <h4>6. User Responsibilities</h4>
+      <p>Because you act as a financier entering data about your clients, you are responsible for obtaining the necessary consent from your clients to store their personal information (such as phone numbers, addresses, and ID numbers) within the SamKass application.</p>
+      
+      <h4>7. Data Retention & Deletion</h4>
+      <p>You have full control over your business data. You can delete individual records or completely clear your local data using the "Clear All Data" feature in the Settings menu. If you wish to permanently delete your SamKass account and cloud data, please contact our support team.</p>
+      
+      <h4>8. Contact Us</h4>
+      <p>If you have any questions or concerns about this Privacy Policy, please contact us at: <a href="mailto:mohansampath098@gmail.com" style="color:var(--text-accent-blue);">mohansampath098@gmail.com</a></p>
+    </div>
+  </div>
+
+  <!-- ── CONTACT US MODAL ── -->
+  <div id="contactModal" class="contact-modal-overlay" style="display:none;" onclick="closeContactOnOverlay(event)">
+    <div class="contact-modal-card">
+      <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:6px; color:var(--text-primary);">Contact Us</h3>
+      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:20px;">Reach us through any of the channels below</p>
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/samkassfinance?igsh=MXF4NjRhbXN2aGlndg==" target="_blank" class="contact-item-row">
+        <div class="contact-item-icon">📸</div>
+        <div>
+          <div class="contact-item-label">Instagram</div>
+          <div class="contact-item-value">@samkassfinance</div>
+        </div>
+      </a>
+
+      <!-- Phone / WhatsApp -->
+      <a href="https://wa.me/917904987242" target="_blank" class="contact-item-row">
+        <div class="contact-item-icon">💬</div>
+        <div>
+          <div class="contact-item-label">WhatsApp / Phone</div>
+          <div class="contact-item-value">+91 7904987242</div>
+        </div>
+      </a>
+
+      <!-- Email -->
+      <a href="mailto:mohansampath098@gmail.com" class="contact-item-row">
+        <div class="contact-item-icon">✉️</div>
+        <div>
+          <div class="contact-item-label">Email Support</div>
+          <div class="contact-item-value">mohansampath098@gmail.com</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- [NEW] Import / Export Data: Hidden file input for import -->
+  <input type="file" id="import-file-input" accept=".json" style="display:none" />
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" data-ocid="toast"></div>
+
+  <!-- Bootstrap 5.3 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Supabase Cloud Sync -->
+  <script src="supabase_sync.js"></script>
+
+  <!-- App Script -->
+  <script src="app.js"></script>
+</body>
+
+</html>
