@@ -1,0 +1,32 @@
+type UserRole = 
+ variant {
+   admin;
+   staff;
+ };
+type UserProfile = 
+ record {
+   businessName: text;
+   financierName: text;
+   phone: text;
+   role: UserRole;
+ };
+type SimpleResult = 
+ variant {
+   err: text;
+   ok;
+ };
+type AuthResult = 
+ variant {
+   err: text;
+   ok: UserProfile;
+ };
+service : {
+  changePin: (phone: text, currentHashedPin: text, newHashedPin: text) ->
+   (SimpleResult);
+  getUserProfile: (phone: text) -> (opt UserProfile) query;
+  login: (phone: text, hashedPin: text) -> (AuthResult);
+  phoneExists: (phone: text) -> (bool) query;
+  register: (phone: text, hashedPin: text, financierName: text, businessName:
+   text, role: UserRole) -> (SimpleResult);
+  resetPin: (phone: text, newHashedPin: text) -> (SimpleResult);
+}
